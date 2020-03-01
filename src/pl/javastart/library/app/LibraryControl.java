@@ -16,12 +16,11 @@ public class LibraryControl {
     private Library library = new Library();
 
     public void controlLoop(){
-        int option;
+        Option option;
 
         do {
             printOptions();
-            option = dataReader.getInt();
-
+            option = Option.createFromInt(dataReader.getInt());
             switch (option){
                 case ADD_BOOK:
                     addBook();
@@ -42,7 +41,7 @@ public class LibraryControl {
                 default:
                     System.out.println("Nie ma takiej opcji, wybierz inną!");
             }
-        } while (option != EXIT);
+        } while (option != Option.EXIT);
     }
 
     private void printMagazine() {
@@ -65,11 +64,8 @@ public class LibraryControl {
 
     private void printOptions() {
         System.out.println("Wybierz opcje:");
-        System.out.println(EXIT + " - wyjście z programu");
-        System.out.println(ADD_BOOK + " - dodanie nowej książki");
-        System.out.println(ADD_MAGAZINE + " - dodanie nowego magazynu");
-        System.out.println(PRINT_BOOKS + " - wyświetlenie wszystkich książek");
-        System.out.println(PRINT_MAGAZINES + " - wyświetlenie wszystkich magazynów");
-
+        for (Option option : Option.values()) {
+            System.out.println(option);
+        }
     }
 }
