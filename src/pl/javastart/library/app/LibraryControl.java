@@ -1,8 +1,12 @@
 package pl.javastart.library.app;
 
+import pl.javastart.library.exceptions.DataExportException;
+import pl.javastart.library.exceptions.DataImportException;
 import pl.javastart.library.exceptions.NoSuchOptionException;
 import pl.javastart.library.io.ConsolePrinter;
 import pl.javastart.library.io.DataReader;
+import pl.javastart.library.io.file.FileManagerBuilder;
+import pl.javastart.library.io.file.FileManger;
 import pl.javastart.library.model.Book;
 import pl.javastart.library.model.Library;
 import pl.javastart.library.model.Magazine;
@@ -14,9 +18,22 @@ public class LibraryControl {
 
     private ConsolePrinter printer = new ConsolePrinter();
     private DataReader dataReader = new DataReader(printer);
-    private Library library = new Library();
+    private FileManger fileManager;
+    private Library library;
 
-    public void controlLoop(){
+    LibraryControl() {
+        fileManager = new FileManagerBuilder(printer, dataReader).build();
+        try {
+            library = fileManager.importData();
+            printer.printLine("Zaimportowano dane z pliku");
+        }catch (DataImportException e){
+            printer.printLine(e.getMessage());
+            printer.printLine("Zainicjowano nową bazę.");
+            library = new Library();
+        }
+    }
+
+    void controlLoop(){
         Option option;
 
         do {
@@ -100,8 +117,51 @@ public class LibraryControl {
     }
 
     private void exit() {
+        try {
+            fileManager.exportData(library);
+            printer.printLine("Export danych do pliku zakończony powodzeniem");
+        }catch (DataExportException e){
+            printer.printLine(e.getMessage());
+        }
         printer.printLine("Koniec programu, papa!");
-        // zamykamy strumień wejścia
         dataReader.close();
     }
+
+    private enum Option {
+        EXIT(0, "Wyjście z programu"),
+        ADD_BOOK(1, "Dodanie książki"),
+        ADD_MAGAZINE(2,"Dodanie magazynu/gazety"),
+        PRINT_BOOKS(3, "Wyświetlenie dostępnych książek"),
+        PRINT_MAGAZINES(4, "WYświetlenie dostępnych magazynów/gazet");
+
+        private int value;
+        private String description;
+
+        public int getValue() {
+            return value;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        Option(int value, String desc) {
+            this.value = value;
+            this.description = desc;
+        }
+
+        @Override
+        public String toString() {
+            return value + " - " + description;
+        }
+
+        static Option createFromInt(int option) throws NoSuchOptionException {
+            try {
+                return Option.values()[option];
+            }catch (ArrayIndexOutOfBoundsException e){
+                throw new NoSuchOptionException("Brak opcji o id " + option);
+            }
+        }
+    }
+
 }

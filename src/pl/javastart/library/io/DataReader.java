@@ -25,6 +25,10 @@ public class DataReader {
         }
     }
 
+    public String getString(){
+        return sc.nextLine();
+    }
+
     public Book readAndCreateBook() {
         printer.printLine("Tytuł: ");
         String title = sc.nextLine();
@@ -58,6 +62,5 @@ public class DataReader {
 
         return new Magazine(title, publisher, language, year, month, day);
     }
-
 
 }
