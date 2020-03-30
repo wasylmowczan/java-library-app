@@ -1,6 +1,7 @@
 package pl.javastart.library.model;
 
 public class Magazine extends Publication {
+    public static final String TYPE = "Magazyn";
     private int month;
     private int day;
     private String language;
@@ -30,6 +31,17 @@ public class Magazine extends Publication {
 
     public String getLanguage() {
         return language;
+    }
+
+    @Override
+    public String toCsv() {
+        return TYPE + ";" +
+                getTitle() + ";" +
+                getPublisher() + ";" +
+                getYear() + ";" +
+                month + ";" +
+                day + ";" +
+                language;
     }
 
     public void setLanguage(String language) {

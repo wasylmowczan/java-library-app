@@ -13,12 +13,14 @@ public class FileManagerBuilder  {
         this.reader = reader;
     }
 
-    public FileManger build(){
+    public FileManager build(){
         printer.printLine("Wybierz format danych:");
         FileType fileType = getFileType();
         switch (fileType) {
             case SERIAL:
                 return new SerializableFileManager();
+            case CSV:
+                return new CsvFileManager();
             default:
                 throw new NoSuchFileTypeException("Nieobsługiwany typ formatu");
         }
