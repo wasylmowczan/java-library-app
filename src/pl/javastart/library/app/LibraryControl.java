@@ -6,13 +6,15 @@ import pl.javastart.library.exceptions.InvalidDataException;
 import pl.javastart.library.exceptions.NoSuchOptionException;
 import pl.javastart.library.io.ConsolePrinter;
 import pl.javastart.library.io.DataReader;
-import pl.javastart.library.io.file.FileManagerBuilder;
 import pl.javastart.library.io.file.FileManager;
+import pl.javastart.library.io.file.FileManagerBuilder;
 import pl.javastart.library.model.Book;
 import pl.javastart.library.model.Library;
 import pl.javastart.library.model.Magazine;
 import pl.javastart.library.model.Publication;
+import pl.javastart.library.model.comparator.DateComparator;
 
+import java.util.Arrays;
 import java.util.InputMismatchException;
 
 public class LibraryControl {
@@ -48,7 +50,7 @@ public class LibraryControl {
                     addMagazine();
                     break;
                 case PRINT_BOOKS:
-                    printBook();
+                    printBooks();
                     break;
                 case PRINT_MAGAZINES:
                     printMagazines();
@@ -92,8 +94,14 @@ public class LibraryControl {
     }
 
     private void printMagazines() {
-        Publication[] publications = library.getPublications();
+        Publication[] publications = getSortedPublications();
         printer.printMagazine(publications);
+    }
+
+    private Publication[] getSortedPublications() {
+        Publication[] publications = library.getPublications();
+        Arrays.sort(publications, new DateComparator());
+        return publications;
     }
 
     private void addMagazine() {
@@ -107,8 +115,8 @@ public class LibraryControl {
         }
     }
 
-    private void printBook() {
-        Publication[] publications = library.getPublications();
+    private void printBooks() {
+        Publication[] publications = getSortedPublications();
         printer.printBooks(publications);
     }
 

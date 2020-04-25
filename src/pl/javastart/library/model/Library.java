@@ -12,7 +12,7 @@ public class Library implements Serializable {
     public Publication[] getPublications() {
         Publication [] result = new Publication[publicationsNumber];
         for (int i = 0; i <result.length ; i++) {
-            result[i]=publications[1];
+            result[i]=publications[i];
         }
         return result;
     }
