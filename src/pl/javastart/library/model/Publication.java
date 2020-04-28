@@ -3,12 +3,12 @@ package pl.javastart.library.model;
 import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class Publication implements Serializable, Comparable<Publication> {
-    private int year;
+public abstract class Publication implements Serializable, Comparable<Publication>, CsvConvertible {
     private String title;
     private String publisher;
+    private int year;
 
-    public Publication( String title, String publisher, int year) {
+    Publication(String title, String publisher, int year) {
         this.title = title;
         this.publisher = publisher;
         this.year = year;
@@ -38,11 +38,9 @@ public abstract class Publication implements Serializable, Comparable<Publicatio
         this.publisher = publisher;
     }
 
-    public abstract String toCsv();
-
     @Override
     public String toString() {
-        return title + "; " + publisher + "; " + year;
+        return title + ", " + publisher + ", " + year;
     }
 
     @Override
@@ -57,7 +55,7 @@ public abstract class Publication implements Serializable, Comparable<Publicatio
 
     @Override
     public int hashCode() {
-        return Objects.hash(year, title, publisher);
+        return Objects.hash(title, publisher, year);
     }
 
     @Override
